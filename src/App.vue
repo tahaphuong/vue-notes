@@ -1,11 +1,19 @@
 <template>
   <div id="screen">
-    <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
-    <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
     <div v-bind="{id: 'input-title'}">Your message:</div>
-    <input v-bind="{id:'input-field', type: 'text'}" v-model="textInput">
-    <button @click="addTag">Add</button>
-
+    <div><input v-bind="{id:'input-field', type: 'text'}" v-model="textInput"></div>
+    <div id="palette">
+      <div
+        v-for="(color, i) in listColors"
+        :key="i"
+        @click="chosenColorIndex=i"
+        class="palette-color"
+        :class="{'palette-color-border-chosen': chosenColorIndex==i}"
+        :style="{backgroundColor: color}"
+      ></div>
+    </div>
+    <div><button v-bind="{id:'confirm-button'}" @click="addTag">Add 📜</button></div>
+    <div><b>Hint: </b>Double click to delete</div>
     <div :style="{position: 'relative'}" >
       <Tag 
         v-for="item in tags" :key="item.id" :item="item"
@@ -27,7 +35,9 @@ export default {
   data: function() {
     return {
       textInput: "",
-      tags: JSON.parse(localStorage.getItem(NOTES_LOCAL_STORAGE)) || []
+      tags: JSON.parse(localStorage.getItem(NOTES_LOCAL_STORAGE)) || [],
+      listColors: ['#fcfcfc', '#ffe6e7', '#ffede0', '#fff8de', '#f5ffe6', '#f0f8ff', '#f5edff'],
+      chosenColorIndex: 0
     }
   },
   components: {
@@ -38,7 +48,7 @@ export default {
       if (this.textInput.length == 0) 
         return
 
-      let item = new TagSchema(this.textInput, 'aliceblue')
+      let item = new TagSchema(this.textInput, this.listColors[this.chosenColorIndex])
       this.tags.push(item)
       this.saveTags()
 
@@ -62,6 +72,12 @@ html, body {
   padding: 0;
   font-family: 'Work Sans', serif;
 }
+
+button {
+  font-family: 'Work Sans', serif;
+  outline: none
+}
+
 #screen {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -71,8 +87,11 @@ html, body {
 
   overflow: hidden;
 }
+#screen>div {
+  margin: 24px 32px
+}
 #input-title {
-  font-weight: 500
+  font-weight: 600;
 }
 
 #input-field {
@@ -81,10 +100,9 @@ html, body {
   font-family: inherit;
 
   outline: none;
-  border-radius: 3px;
+  border-radius: 4px;
   border: 1.5px #eeeeee solid;
-  margin: 20px 30px;
-  padding: 2px 10px;
+  padding: 4px 12px;
   display: block;
 
   transition: box-shadow 0.3s, border-color 0.3s;
@@ -94,4 +112,44 @@ html, body {
   box-shadow: rgba(202, 202, 202, 0.199) 0px 8px 14px;
   border-color: transparent
 }
+
+#confirm-button {
+  cursor: pointer;
+  padding: 8px 32px;
+
+  background-color: transparent;
+  border-radius: 4px;
+  border: 0.7px solid #acacac;
+  transition: box-shadow 0.4s;
+  background-color: #fcfcfc;
+}
+
+#confirm-button:hover {
+  box-shadow: rgba(185, 191, 197, 0.2) 0px 8px 16px;
+}
+
+#confirm-button:active {
+  box-shadow: rgba(151, 161, 170, 0.377) 0px 8px 24px;
+}
+
+#palette {
+  display: flex;
+}
+
+.palette-color {
+  cursor: pointer;
+
+  height: 24px;
+  width: 24px;
+  border-radius: 4px;
+  border: 1px solid #d3d3d3;
+  margin-right: 8px;
+  transition: border-color 0.4s, box-shadow 0.4s;
+}
+
+.palette-color-border-chosen {
+  border-color:#919191;
+  box-shadow: rgba(185, 191, 197, 0.2) 0px 4px 12px;
+}
+
 </style>

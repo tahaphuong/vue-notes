@@ -4,7 +4,7 @@
     @mouseout="releaseTag" 
     @mousemove="moveTag" 
     @mouseup="releaseTag"
-    @dblclick="clickToDeleteTag"
+    @dblclick="dblclickToDeleteTag"
     v-bind="{class: 'tag'}"
   >
   {{ item.text }}
@@ -45,9 +45,10 @@ export default {
         this.initialY = e.clientY
       }
     },
-    clickToDeleteTag: function() {
-      console.log("emitting")
-      this.$emit('click-to-delete-tag', this.item)
+    dblclickToDeleteTag: function() {
+      let confirmation = confirm("Are xou sure to delete item: " + this.item.text)
+      if (confirmation)
+        this.$emit('click-to-delete-tag', this.item)
     }
   }
 }
@@ -57,8 +58,10 @@ export default {
   .tag {
     cursor: grab;
 
-    height: 150px;
-    width: 150px;
+    height: 145px;
+    width: 145px;
+    padding: 10px;
+
     position: absolute;
     display: flex;
     justify-content: center;
@@ -66,6 +69,16 @@ export default {
 
     border: 0.7px rgba(196, 196, 196, 0.322) solid;
 
+    -ms-word-break: break-all;
+    word-break: break-all;
+    
+    /* Non standard for webkit */
+    word-break: break-word;
+    -webkit-hyphens: auto;
+       -moz-hyphens: auto;
+        -ms-hyphens: auto;
+            hyphens: auto;
+    
     font-size: 14px;
     user-select: none;
 
