@@ -1,10 +1,12 @@
 # my-app
 
-## Hello
+## Hello ;)
 <br>
-<a href="https://demo-notes.netlify.app/">Demo link</a>
-<br>
-100% local.
+Site: https://demo-notes.netlify.app/ 
+
+<img src="./screen.png" width="400" />
+
+Data is saved in localStorage
 
 Follow these steps to run the app:
 
